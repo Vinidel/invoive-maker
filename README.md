@@ -1,4 +1,5 @@
 # Gerador de Faturas (Electron)
+[![Release](https://github.com/Vinidel/invoive-maker/actions/workflows/release.yml/badge.svg)](https://github.com/Vinidel/invoive-maker/actions/workflows/release.yml)
 
 Aplicativo desktop local para criar faturas com pré-visualização em tempo real, catálogo de serviços e exportação para PDF.
 
