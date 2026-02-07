@@ -34,3 +34,6 @@ Coloque a imagem em `assets/logo.png`. O app também permite trocar o logo pelo 
 
 ## Build (opcional)
 Ainda não configurado. Se quiser empacotar (Windows/macOS/Linux), posso adicionar Electron Builder.
+
+## Release
+Veja o passo a passo em `RELEASE.md`.
