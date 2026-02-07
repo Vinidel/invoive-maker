@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gerador de Faturas</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="topbar">
+        <div>
+          <div class="eyebrow">Gerador Local de Faturas</div>
+          <h1>Gerador de Faturas</h1>
+          <div class="tabs">
+            <button id="tabInvoice" class="tab active">Fatura</button>
+            <button id="tabConfig" class="tab">Configurações</button>
+          </div>
+        </div>
+        <div class="actions">
+          <button id="clearBtn" class="ghost">Limpar</button>
+          <button id="printBtn" class="primary">Salvar PDF</button>
+        </div>
+      </header>
+
+      <main id="invoiceView" class="main view active">
+        <section class="panel form-panel">
+          <h2>Detalhes da Fatura</h2>
+          <div class="grid">
+            <label>
+              <span>Nº da Fatura</span>
+              <input id="invoiceNumber" type="text" placeholder="FAT-1001" />
+            </label>
+            <label>
+              <span>Data</span>
+              <input id="invoiceDate" type="date" />
+            </label>
+            <label>
+              <span>Vencimento</span>
+              <input id="dueDate" type="date" />
+            </label>
+            <label>
+              <span>Moeda</span>
+              <select id="currency">
+                <option value="BRL">BRL</option>
+                <option value="USD">USD</option>
+                <option value="EUR">EUR</option>
+                <option value="GBP">GBP</option>
+                <option value="JPY">JPY</option>
+                <option value="CAD">CAD</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="split">
+            <label>
+              <span>Cliente</span>
+              <textarea id="to" rows="5" placeholder="Nome do cliente\nEmpresa\nEndereço\nEmail"></textarea>
+            </label>
+          </div>
+
+          <div class="items-header">
+            <h3>Itens</h3>
+            <button id="addItem" class="ghost">Adicionar Item</button>
+          </div>
+
+          <div class="items" id="items"></div>
+
+          <div class="grid totals">
+            <label>
+              <span>Imposto (%)</span>
+              <input id="taxRate" type="number" min="0" step="0.01" placeholder="0" />
+            </label>
+            <label>
+              <span>Desconto</span>
+              <input id="discount" type="number" min="0" step="0.01" placeholder="0" />
+            </label>
+            <label>
+              <span>Frete</span>
+              <input id="shipping" type="number" min="0" step="0.01" placeholder="0" />
+            </label>
+          </div>
+
+          <label>
+            <span>Observações</span>
+            <textarea id="notes" rows="3" placeholder="Instruções de pagamento, agradecimentos, etc."></textarea>
+          </label>
+        </section>
+
+        <section class="panel preview-panel">
+          <div class="preview" id="preview">
+            <div class="preview-header">
+              <div class="preview-brand-left">
+                <img id="companyLogo" src="assets/logo.png" alt="Logo da empresa" />
+                <div>
+                  <div class="preview-label">Fatura</div>
+                  <div class="preview-meta">
+                    <div><strong>Nº</strong> <span id="prevInvoiceNumber">FAT-1001</span></div>
+                    <div><strong>Data</strong> <span id="prevInvoiceDate">—</span></div>
+                    <div><strong>Venc.</strong> <span id="prevDueDate">—</span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="preview-company">
+                <div class="preview-from" id="prevFrom"></div>
+                <div class="preview-contacts">
+                  <div class="contact-line">
+                    <svg class="icon" viewBox="0 0 32 32" aria-hidden="true">
+                      <path d="M19.2 17.7c-.4-.2-2.5-1.2-2.9-1.4-.4-.2-.7-.2-1 .2l-.8 1c-.2.3-.5.3-.8.2-1.7-.8-3.1-2.2-3.9-3.9-.2-.3-.1-.6.2-.8l1-.8c.3-.3.3-.6.2-1-.1-.4-1.2-2.5-1.4-2.9-.2-.4-.4-.6-.7-.6h-1c-.3 0-.7.1-1 .4-.3.3-1.3 1.2-1.3 2.9s1.3 3.4 1.5 3.6c.2.2 2.5 3.9 6.1 5.5.9.4 1.6.6 2.1.7.9.3 1.7.2 2.3.1.7-.1 2.1-.8 2.4-1.6.3-.8.3-1.5.2-1.6-.1-.1-.4-.2-.8-.4z" fill="currentColor" />
+                      <path d="M16 3c-7.2 0-13 5.8-13 13 0 2.3.6 4.6 1.8 6.6L3 29l6.6-1.7c1.9 1.1 4.1 1.7 6.4 1.7 7.2 0 13-5.8 13-13S23.2 3 16 3zm0 23.5c-2 0-4-.5-5.8-1.5l-.4-.2-3.9 1 1-3.8-.2-.4c-1-1.8-1.5-3.8-1.5-5.9C5.2 9.2 10.2 4.2 16 4.2s10.8 5 10.8 10.8S21.8 26.5 16 26.5z" fill="currentColor" />
+                    </svg>
+                    <span id="prevWhatsapp">—</span>
+                  </div>
+                  <div class="contact-line">
+                    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M7 3h10c2.2 0 4 1.8 4 4v10c0 2.2-1.8 4-4 4H7c-2.2 0-4-1.8-4-4V7c0-2.2 1.8-4 4-4zm0 2c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2H7zm10.5 1.5a1 1 0 1 1 0 2 1 1 0 0 1 0-2zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2.2a2.8 2.8 0 1 0 0 5.6 2.8 2.8 0 0 0 0-5.6z" fill="currentColor" />
+                    </svg>
+                    <span id="prevInstagram">—</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="preview-to" id="prevTo"></div>
+
+            <table class="preview-table">
+              <thead>
+                <tr>
+                  <th>Descrição</th>
+                  <th>Qtd</th>
+                  <th>Valor</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody id="prevItems"></tbody>
+            </table>
+
+            <div class="summary">
+              <div class="summary-row"><span>Subtotal</span><span id="prevSubtotal">R$ 0,00</span></div>
+              <div class="summary-row"><span>Imposto</span><span id="prevTax">R$ 0,00</span></div>
+              <div class="summary-row"><span>Desconto</span><span id="prevDiscount">R$ 0,00</span></div>
+              <div class="summary-row"><span>Frete</span><span id="prevShipping">R$ 0,00</span></div>
+              <div class="summary-row total"><span>Total</span><span id="prevTotal">R$ 0,00</span></div>
+            </div>
+
+            <div class="preview-notes" id="prevNotes"></div>
+          </div>
+        </section>
+      </main>
+
+      <main id="configView" class="main view">
+        <section class="panel config-panel">
+          <div class="panel-header">
+            <div>
+              <h2>Configurações da Empresa</h2>
+              <p class="panel-subtitle">Atualize as informações fixas que aparecem na fatura.</p>
+            </div>
+          </div>
+
+          <div class="grid config-grid">
+            <label>
+              <span>Nome da Empresa</span>
+              <input id="companyName" type="text" placeholder="Nome da empresa" />
+            </label>
+            <label>
+              <span>CNPJ</span>
+              <input id="companyCnpj" type="text" placeholder="00.000.000/0000-00" />
+            </label>
+            <label>
+              <span>Telefone</span>
+              <input id="companyPhone" type="text" placeholder="(00) 00000-0000" />
+            </label>
+            <label>
+              <span>WhatsApp</span>
+              <input id="companyWhatsapp" type="text" placeholder="(00) 00000-0000" />
+            </label>
+            <label>
+              <span>Instagram</span>
+              <input id="companyInstagram" type="text" placeholder="@seuinstagram" />
+            </label>
+          </div>
+
+          <div class="logo-row">
+            <div>
+              <label>
+                <span>Logo da Empresa</span>
+                <input id="companyLogoFile" type="file" accept="image/*" />
+              </label>
+              <div class="logo-actions">
+                <button id="logoReset" class="ghost">Usar logo padrão</button>
+              </div>
+            </div>
+            <div class="logo-preview">
+              <img id="companyLogoPreview" src="assets/logo.png" alt="Prévia do logo" />
+            </div>
+          </div>
+        </section>
+
+        <section class="panel services-panel">
+          <div class="panel-header">
+            <div>
+              <h2>Catálogo de Serviços</h2>
+              <p class="panel-subtitle">Adicione serviços reutilizáveis oferecidos pela sua empresa.</p>
+            </div>
+            <button id="addService" class="ghost">Adicionar Serviço</button>
+          </div>
+
+          <div class="services-grid" id="services"></div>
+        </section>
+      </main>
+    </div>
+
+    <template id="itemTemplate">
+      <div class="item">
+        <select class="item-service">
+          <option value="">Personalizado</option>
+        </select>
+        <input class="item-desc" type="text" placeholder="Descrição" />
+        <input class="item-qty" type="number" min="0" step="1" value="1" />
+        <input class="item-rate" type="number" min="0" step="0.01" value="0" />
+        <button class="item-remove" title="Remover">Remover</button>
+      </div>
+    </template>
+
+    <template id="serviceTemplate">
+      <div class="service-card">
+        <input class="service-name" type="text" placeholder="Nome do serviço" />
+        <textarea class="service-desc" rows="2" placeholder="Descrição curta"></textarea>
+        <div class="service-footer">
+          <input class="service-rate" type="number" min="0" step="0.01" placeholder="Valor" />
+          <button class="service-remove">Remover</button>
+        </div>
+      </div>
+    </template>
+
+    <script src="renderer.js"></script>
+  </body>
+</html>
