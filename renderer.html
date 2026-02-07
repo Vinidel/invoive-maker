@@ -11,9 +11,9 @@
       <header class="topbar">
         <div>
           <div class="eyebrow">Gerador Local de Faturas</div>
-          <h1>Gerador de Faturas</h1>
+          <h1>Gerador de Orçamentos</h1>
           <div class="tabs">
-            <button id="tabInvoice" class="tab active">Fatura</button>
+            <button id="tabInvoice" class="tab active">Orçamento</button>
             <button id="tabConfig" class="tab">Configurações</button>
           </div>
         </div>
@@ -25,10 +25,10 @@
 
       <main id="invoiceView" class="main view active">
         <section class="panel form-panel">
-          <h2>Detalhes da Fatura</h2>
+          <h2>Detalhes do Orçamento</h2>
           <div class="grid">
             <label>
-              <span>Nº da Fatura</span>
+              <span>Nº do Orçamento</span>
               <input id="invoiceNumber" type="text" placeholder="FAT-1001" />
             </label>
             <label>
@@ -52,10 +52,22 @@
             </label>
           </div>
 
-          <div class="split">
+          <div class="grid client-grid">
             <label>
-              <span>Cliente</span>
-              <textarea id="to" rows="5" placeholder="Nome do cliente\nEmpresa\nEndereço\nEmail"></textarea>
+              <span>Nome</span>
+              <input id="clientName" type="text" placeholder="Nome do cliente" />
+            </label>
+            <label>
+              <span>Endereço</span>
+              <input id="clientAddress" type="text" placeholder="Rua, número, bairro, cidade" />
+            </label>
+            <label>
+              <span>Email</span>
+              <input id="clientEmail" type="email" placeholder="email@exemplo.com" />
+            </label>
+            <label>
+              <span>Contato</span>
+              <input id="clientContact" type="text" placeholder="(00) 00000-0000" />
             </label>
           </div>
 
@@ -93,9 +105,9 @@
               <div class="preview-brand-left">
                 <img id="companyLogo" src="assets/logo.png" alt="Logo da empresa" />
                 <div>
-                  <div class="preview-label">Fatura</div>
+                <div class="preview-label">Orçamento</div>
                   <div class="preview-meta">
-                    <div><strong>Nº</strong> <span id="prevInvoiceNumber">FAT-1001</span></div>
+                  <div><strong>Nº</strong> <span id="prevInvoiceNumber">ORC-1001</span></div>
                     <div><strong>Data</strong> <span id="prevInvoiceDate">—</span></div>
                     <div><strong>Venc.</strong> <span id="prevDueDate">—</span></div>
                   </div>

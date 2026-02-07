@@ -10,7 +10,7 @@ function createWindow() {
     height: 800,
     minWidth: 1000,
     minHeight: 700,
-    title: 'Invoice Maker',
+    title: 'Gerador de Orçamentos',
     webPreferences: {
       contextIsolation: true,
       preload: path.join(__dirname, 'preload.js')
@@ -41,8 +41,8 @@ ipcMain.handle('print-to-pdf', async (_event) => {
   if (!win) return { ok: false, error: 'No active window' };
 
   const { canceled, filePath } = await dialog.showSaveDialog(win, {
-    title: 'Save Invoice as PDF',
-    defaultPath: 'invoice.pdf',
+    title: 'Salvar Orçamento em PDF',
+    defaultPath: 'orcamento.pdf',
     filters: [{ name: 'PDF', extensions: ['pdf'] }]
   });
 

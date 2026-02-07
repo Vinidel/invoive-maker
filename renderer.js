@@ -9,7 +9,10 @@ const invoiceNumber = document.getElementById('invoiceNumber');
 const invoiceDate = document.getElementById('invoiceDate');
 const dueDate = document.getElementById('dueDate');
 const currency = document.getElementById('currency');
-const to = document.getElementById('to');
+const clientName = document.getElementById('clientName');
+const clientAddress = document.getElementById('clientAddress');
+const clientEmail = document.getElementById('clientEmail');
+const clientContact = document.getElementById('clientContact');
 const taxRate = document.getElementById('taxRate');
 const discount = document.getElementById('discount');
 const shipping = document.getElementById('shipping');
@@ -255,11 +258,17 @@ function updatePreview() {
   const shippingValue = parseFloat(shipping.value) || 0;
   const total = subtotal + tax + shippingValue - discountValue;
 
-  prevInvoiceNumber.textContent = invoiceNumber.value || 'FAT-1001';
+  prevInvoiceNumber.textContent = invoiceNumber.value || 'ORC-1001';
   prevInvoiceDate.textContent = formatDateInput(invoiceDate.value);
   prevDueDate.textContent = formatDateInput(dueDate.value);
   prevFrom.textContent = buildCompanyText();
-  prevTo.textContent = to.value || 'Dados do cliente';
+  const clientLines = [
+    clientName.value.trim(),
+    clientAddress.value.trim(),
+    clientEmail.value.trim(),
+    clientContact.value.trim()
+  ].filter(Boolean);
+  prevTo.textContent = clientLines.length ? clientLines.join('\n') : 'Dados do cliente';
   prevNotes.textContent = notes.value || '';
   prevWhatsapp.textContent = companyConfig.whatsapp || '—';
   prevInstagram.textContent = companyConfig.instagram || '—';
@@ -299,7 +308,10 @@ function clearForm() {
   invoiceDate.value = '';
   dueDate.value = '';
   currency.value = 'BRL';
-  to.value = '';
+  clientName.value = '';
+  clientAddress.value = '';
+  clientEmail.value = '';
+  clientContact.value = '';
   taxRate.value = '';
   discount.value = '';
   shipping.value = '';
@@ -310,7 +322,7 @@ function clearForm() {
   updatePreview();
 }
 
-[invoiceNumber, invoiceDate, dueDate, currency, to, taxRate, discount, shipping, notes].forEach(
+[invoiceNumber, invoiceDate, dueDate, currency, clientName, clientAddress, clientEmail, clientContact, taxRate, discount, shipping, notes].forEach(
   (input) => input.addEventListener('input', updatePreview)
 );
 
